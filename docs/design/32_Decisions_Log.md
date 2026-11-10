@@ -101,6 +101,32 @@ Status key: DECIDED = answered by the product owner. Consequences marked [Certai
 | FX-31 | "All other categories" row on What changed | **Keep the current wording.** | [Certain] No change requested. The verifier's concern (remainder hides the median gap) is accepted as is. |
 | FX-45 | Paise rounding rule | **Totals are exact; rows round for display.** Reword the P0-06 Accept to say so. | [Certain] A Rs 1 difference between rows and total is expected when paise are off. |
 
+## Lending follow-ups (2026-11-10, build Phase 0, task T06)
+
+These answers settle gaps G-04 to G-09, G-18 and G-19 and the D-03 vocabulary.
+
+| ID | Decision | Answer | Consequence |
+|---|---|---|---|
+| L-01 | How lending is modelled (G-18) | **A separate system "Money lent" account, as in the prototype.** Each loan is a record per borrower. Lending is a Move from the paying account to this account. | [Certain] Amends doc 04 (lending was a Move to Outside), docs 02/03 (new account class and a `loans` table), T-30. The account's balance is the outstanding amount lent and appears only in "Owed to you" (D-03b), never in "What you have" (G-19 resolved). |
+| L-02 | Interest and repayments (G-05) | **Keep the prototype rules.** Simple interest = amount still owed x yearly rate x days / 365, never compounded. Repayments settle interest first, then the amount lent. Repayments are capped at what is owed. Interest counts as Received only when it is repaid. A repaid amount lent is never income. | [Certain] The rate is typed by the user (Q-12a). G-08 resolved: a system income category for interest earned is needed. |
+| L-03 | Interest rounding | **Show to the paisa; round only that.** The calculation keeps the exact value; the shown and stored figure is the nearest paisa. Nothing is rounded to rupees. | [Certain] INV-15 holds (whole paise in every stored amount). [Guessing] Tie rule: half up. It is the assistant's call; confirm in the group A amendment review. |
+| L-04 | Day count | **Always 365 days, leap years included. Interest starts the day after the lending date; the repayment day counts.** | [Certain] Example: lent 1 March, repaid 31 March = 30 days. |
+| L-05 | Statuses (G-06) | **Keep the prototype set:** Active, Partially repaid, Fully repaid, Overdue, Written off, and the optional "Expected back by" date. Overdue = the date has passed and money is still owed. | [Certain] "Written off" is shown to users as "Won't get back" (L-07). |
+| L-06 | Write-off (G-07, D-03a) | **Only the whole remainder; the loss is the amount lent still owed, not the unpaid interest.** It shows as its own line in Overview for the month of the write-off. It is not in Spent, Received or Kept. | [Certain] The loan closes, stops counting in every total, and stops accruing interest. Unpaid interest is dropped. Earlier repayments stay. No partial write-off. |
+| L-07 | Lending vocabulary (D-03 open terms) | **Plain set:** principal → "Amount lent" (or "Still owed" for what is left); write off → "Won't get back"; receivable → "Owed to you". | [Certain] Closes the D-03 vocabulary question. "Net worth" stays banned in copy (P1-33). |
+| L-08 | Undo a write-off | **Undo until the next action (D-02), and "Reopen loan" on the loan detail later.** | [Certain] Reopening restores the outstanding amount and resumes interest from the reopen date. [Guessing] Interest for the written-off period is not charged; confirm in the group A review. |
+| L-09 | Where "Owed to you" appears | **On Home, as a line under Money available, and in Accounts. Tapping it lists the loans.** | [Certain] It is never added into Money available or "What you have" (D-03b). |
+
+Already decided elsewhere and unchanged: delete only when nothing was repaid, otherwise "Mark settled" or "Archive" (Q-12b, G-09); an "already lent earlier" path that creates an opening amount owed with no account movement, plus a lending-date picker (P1-33).
+
+## Other Phase 0 follow-ups (2026-11-10, after the amendment inventory)
+
+| ID | Decision | Answer | Consequence |
+|---|---|---|---|
+| D-18a | Record for "owe less than recorded" | **The existing `correction` kind, category "Not recorded", counted in no total** (not Spent, Received, Kept or baselines). Undo works as for other balance checks. | [Certain] No new record kind. Docs 02, 04 and 06 get the rule. |
+| D-19a | Corrections in the Spent total | **Only comparisons exclude corrections.** M-04 keeps corrections as a separate line, as specified. "vs typical", baselines, anomalies and shares exclude them. | [Certain] Doc 06 M-04 formula stays. Doc 07 and the comparison metrics get the exclusion. |
+| P-01 | Amendments with no existing spec section; wrong references in design doc 30 §9 | **Add new marked sections in the right spec doc, and add a short "corrected references" note to design doc 30 §9.** | [Certain] Locations are in `docs/build/tasks/P0-T05-inventory.md`. |
+
 ## Status after the walk-through
 
 - All decisions D-02 to D-31 and questions Q-1 to Q-14 are answered or settled by D-29.
