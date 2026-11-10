@@ -1,0 +1,4 @@
+# Local-only files (kept on disk, never committed)
+*.zip
+.playwright-mcp/
+_archive/

@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  [data-theme]{
+    --s1:oklch(97% 0.014 75); --s2:oklch(94% 0.02 70); --line:oklch(85% 0.02 70);
+    --ink:oklch(22% 0.02 60); --ink-2:oklch(35% 0.02 60); --ink-3:oklch(40% 0.02 60); --ink-4:oklch(45% 0.02 60);
+    --accent:oklch(52% 0.14 45); --accent-hover:oklch(40% 0.14 45); --accent-soft:oklch(90% 0.05 45);
+    --good:oklch(50% 0.14 145); --inverse-bg:oklch(22% 0.02 60); --inverse-fg:oklch(97% 0.01 75);
+    --nav-bg:oklch(97% 0.014 75 / 0.92);
+  }
+  [data-theme="dark"]{
+    --s1:oklch(19% 0.014 60); --s2:oklch(14% 0.014 60); --line:oklch(32% 0.02 60);
+    --ink:oklch(92% 0.01 70); --ink-2:oklch(80% 0.01 70); --ink-3:oklch(72% 0.01 70); --ink-4:oklch(62% 0.01 70);
+    --accent:oklch(64% 0.14 45); --accent-hover:oklch(72% 0.13 45); --accent-soft:oklch(32% 0.08 45);
+    --good:oklch(66% 0.14 145); --inverse-bg:oklch(85% 0.02 70); --inverse-fg:oklch(16% 0.02 60);
+    --nav-bg:oklch(19% 0.014 60 / 0.88);
+  }
+  body{margin:0;background:var(--s1);}
+  a{color:var(--accent);}
+  a:hover{color:var(--accent-hover);}
+  ::selection{background:var(--accent-soft);}
+  .serif{font-family:'Newsreader',Georgia,serif;}
+  .sans{font-family:'Public Sans',-apple-system,sans-serif;}
+  .theme-btn{border:1px solid var(--line);background:var(--s2);color:var(--ink);border-radius:100px;padding:7px 14px;font:600 12.5px 'Public Sans',sans-serif;cursor:pointer;white-space:nowrap;}
+  @media (max-width: 860px){ .hide-mobile{display:none !important;} .stack-mobile{flex-direction:column !important;} }
+</style>
+</helmet>
+<div class="sans" data-theme="{{ theme }}" style="max-width:100%;overflow-x:hidden;color:var(--ink);line-height:1.6;background:var(--s1);">
+
+<!-- ============ STICKY TOP NAV ============ -->
+<div style="position:sticky;top:0;z-index:50;background:var(--nav-bg);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);">
+  <div style="max-width:1040px;margin:0 auto;display:flex;align-items:center;gap:24px;padding:14px 28px;">
+    <div class="serif" style="font-size:18px;font-weight:600;white-space:nowrap;">The Money Tracker Handbook</div>
+    <div class="hide-mobile" style="display:flex;gap:18px;overflow-x:auto;overflow-y:hidden;font-size:13.5px;font-weight:500;color:var(--ink-3);flex:1;">
+      <a href="#start-here">Start here</a>
+      <a href="#navigation">Navigation</a>
+      <a href="#accounts">Accounts</a>
+      <a href="#transactions">Transactions</a>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#plan">Budgets</a>
+      <a href="#lending">Money Lent</a>
+      <a href="#reports">Reports</a>
+      <a href="#reference">Quick reference</a>
+      <a href="#checklist">Checklist</a>
+    </div>
+    <button class="theme-btn" onClick="{{ toggleTheme }}">{{ themeLabel }}</button>
+  </div>
+</div>
+
+<!-- ============ 1. HERO ============ -->
+<section style="max-width:760px;margin:0 auto;padding:72px 28px 48px;">
+  <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;">A friendly guide, not a manual</div>
+  <h1 class="serif" style="font-size:44px;line-height:1.15;font-weight:600;margin:0 0 20px;">What is this app, and what can it do for you?</h1>
+  <p style="font-size:19px;line-height:1.65;color:var(--ink-2);margin:0 0 16px;text-wrap:pretty;">This app is a place to write down what happens to your money — what you earned, what you spent, what you moved, and what you lent to people who owe it back. It doesn't connect to your bank and it doesn't do anything automatically. Everything in it is something <em>you</em> told it.</p>
+  <p style="font-size:19px;line-height:1.65;color:var(--ink-2);margin:0;text-wrap:pretty;">In return, it helps you answer four simple questions, honestly and without judgement:</p>
+</section>
+
+<!-- big picture diagram -->
+<section style="max-width:900px;margin:0 auto;padding:0 28px 64px;">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
+    <div style="background:var(--inverse-bg);color:var(--inverse-fg);padding:16px 28px;border-radius:10px;font-weight:600;font-size:16px;">Your money</div>
+    <div style="width:2px;height:28px;background:var(--line);"></div>
+    <div style="display:flex;gap:16px;width:100%;justify-content:center;flex-wrap:wrap;">
+      <div style="width:1px;"></div>
+    </div>
+    <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center;width:100%;">
+      <div style="flex:1;min-width:190px;max-width:230px;display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <div style="width:2px;height:20px;background:var(--line);"></div>
+        <div style="background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;text-align:center;width:100%;box-sizing:border-box;">
+          <div style="font-weight:700;font-size:14px;">Where is my money?</div>
+          <div style="font-size:12.5px;color:var(--ink-4);margin-top:4px;">Accounts</div>
+        </div>
+      </div>
+      <div style="flex:1;min-width:190px;max-width:230px;display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <div style="width:2px;height:20px;background:var(--line);"></div>
+        <div style="background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;text-align:center;width:100%;box-sizing:border-box;">
+          <div style="font-weight:700;font-size:14px;">What happened to it?</div>
+          <div style="font-size:12.5px;color:var(--ink-4);margin-top:4px;">Transactions</div>
+        </div>
+      </div>
+      <div style="flex:1;min-width:190px;max-width:230px;display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <div style="width:2px;height:20px;background:var(--line);"></div>
+        <div style="background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;text-align:center;width:100%;box-sizing:border-box;">
+          <div style="font-weight:700;font-size:14px;">What's coming up?</div>
+          <div style="font-size:12.5px;color:var(--ink-4);margin-top:4px;">Plan &amp; regular bills</div>
+        </div>
+      </div>
+      <div style="flex:1;min-width:190px;max-width:230px;display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <div style="width:2px;height:20px;background:var(--line);"></div>
+        <div style="background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;text-align:center;width:100%;box-sizing:border-box;">
+          <div style="font-weight:700;font-size:14px;">What's owed to me?</div>
+          <div style="font-size:12.5px;color:var(--ink-4);margin-top:4px;">Money Lent</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p style="text-align:center;font-size:14px;color:var(--ink-4);margin:20px 0 0;">Reports pull all four together and describe your own habits back to you — nothing here is advice, and nothing is ever automatic.</p>
+</section>
+
+<!-- ============ 2. START HERE ============ -->
+<section id="start-here" style="background:var(--s2);padding:64px 0;">
+<div style="max-width:760px;margin:0 auto;padding:0 28px;">
+  <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">If you're new</div>
+  <h2 class="serif" style="font-size:32px;font-weight:600;margin:0 0 28px;">Start here: five places to know</h2>
+  <div style="display:flex;flex-direction:column;gap:16px;">
+    <div style="background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:22px 24px;display:flex;gap:18px;">
+      <div class="serif" style="font-size:26px;font-weight:600;color:var(--accent);flex:none;width:36px;">1</div>
+      <div><div style="font-weight:700;font-size:16px;margin-bottom:4px;">Accounts</div><div style="color:var(--ink-3);">Where your money currently lives — your bank, your cash, your wallet, your card, and money people owe you.</div></div>
+    </div>
+    <div style="background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:22px 24px;display:flex;gap:18px;">
+      <div class="serif" style="font-size:26px;font-weight:600;color:var(--accent);flex:none;width:36px;">2</div>
+      <div><div style="font-weight:700;font-size:16px;margin-bottom:4px;">Transactions</div><div style="color:var(--ink-3);">The record of every rupee that came in, went out, or moved between your own accounts.</div></div>
+    </div>
+    <div style="background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:22px 24px;display:flex;gap:18px;">
+      <div class="serif" style="font-size:26px;font-weight:600;color:var(--accent);flex:none;width:36px;">3</div>
+      <div><div style="font-weight:700;font-size:16px;margin-bottom:4px;">Home (your dashboard)</div><div style="color:var(--ink-3);">The first screen you see — a quick snapshot of what you have, what's left to spend, and anything worth noticing.</div></div>
+    </div>
+    <div style="background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:22px 24px;display:flex;gap:18px;">
+      <div class="serif" style="font-size:26px;font-weight:600;color:var(--accent);flex:none;width:36px;">4</div>
+      <div><div style="font-weight:700;font-size:16px;margin-bottom:4px;">Plan</div><div style="color:var(--ink-3);">Where you set spending limits and keep track of bills that repeat every month, like rent.</div></div>
+    </div>
+    <div style="background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:22px 24px;display:flex;gap:18px;">
+      <div class="serif" style="font-size:26px;font-weight:600;color:var(--accent);flex:none;width:36px;">5</div>
+      <div><div style="font-weight:700;font-size:16px;margin-bottom:4px;">Money Lent</div><div style="color:var(--ink-3);">Tucked inside Accounts — keeps track of money you've lent to friends or family, with or without interest.</div></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ============ 3. NAVIGATION ============ -->
+<section id="navigation" style="max-width:760px;margin:0 auto;padding:64px 28px;">
+  <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">A tour</div>
+  <h2 class="serif" style="font-size:32px;font-weight:600;margin:0 0 16px;">Finding your way around</h2>
+  <p style="font-size:16px;color:var(--ink-2);margin:0 0 28px;">Five tabs sit at the bottom of the app, always within reach.</p>
+  <div style="display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--s2);">
+    <div style="display:flex;gap:16px;padding:18px 22px;background:var(--s1);border-bottom:1px solid var(--line);">
+      <div style="flex:none;width:64px;font-weight:700;font-size:14px;color:var(--accent);">Home</div>
+      <div style="font-size:14.5px;color:var(--ink-3);">Your snapshot: money available, what's left to spend this month, and one useful thing worth noticing today.</div>
+    </div>
+    <div style="display:flex;gap:16px;padding:18px 22px;border-bottom:1px solid var(--line);">
+      <div style="flex:none;width:64px;font-weight:700;font-size:14px;color:var(--accent);">Transactions</div>
+      <div style="font-size:14.5px;color:var(--ink-3);">Every recorded item, grouped by day, searchable and filterable. Tap any row for full detail.</div>
+    </div>
+    <div style="display:flex;gap:16px;padding:18px 22px;background:var(--s1);border-bottom:1px solid var(--line);">
+      <div style="flex:none;width:64px;font-weight:700;font-size:14px;color:var(--accent);">Reports</div>
+      <div style="font-size:14.5px;color:var(--ink-3);">Charts and summaries that read your own history back to you: overview, limits, what changed, bills, drift.</div>
+    </div>
+    <div style="display:flex;gap:16px;padding:18px 22px;border-bottom:1px solid var(--line);">
+      <div style="flex:none;width:64px;font-weight:700;font-size:14px;color:var(--accent);">Plan</div>
+      <div style="font-size:14.5px;color:var(--ink-3);">Left to spend this month, regular bills, and spending limits — the forward-looking tab.</div>
+    </div>
+    <div style="display:flex;gap:16px;padding:18px 22px;background:var(--s1);">
+      <div style="flex:none;width:64px;font-weight:700;font-size:14px;color:var(--accent);">Settings</div>
+      <div style="font-size:14.5px;color:var(--ink-3);">Accounts, categories, preferences, app lock, your data, and — tucked under Accounts — Money Lent.</div>
+    </div>
+  </div>
+  <p style="font-size:14px;color:var(--ink-4);margin-top:16px;">A round <strong>+</strong> button is always on screen too — tap it any time to record something new.</p>
+</section>
+
+<!-- ============ FEATURE SECTION TEMPLATE STARTS: ACCOUNTS ============ -->
+<section id="accounts" style="background:var(--s2);padding:64px 0;">
+<div style="max-width:760px;margin:0 auto;padding:0 28px;">
+  <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Where your money is</div>
+  <h2 class="serif" style="font-size:32px;font-weight:600;margin:0 0 16px;">Accounts</h2>
+  <p style="font-size:17px;line-height:1.65;color:var(--ink-2);margin:0 0 24px;text-wrap:pretty;">An account is simply a place your money is kept or tracked — a bank, a wallet, cash in your pocket, a credit card, even money you've lent to someone. The app doesn't connect to any of these; you tell it what's in each one, and it keeps the running total from there.</p>
+
+  <div style="background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:24px;margin-bottom:24px;">
+    <div style="font-weight:700;font-size:15px;margin-bottom:14px;">What you'll find under Accounts</div>
+    <table style="width:100%;border-collapse:collapse;font-size:14.5px;">
+      <tbody>
+        <tr style="border-top:1px solid var(--line);"><td style="padding:10px 0;font-weight:600;">Everyday accounts</td><td style="padding:10px 0;color:var(--ink-3);">Bank account, Cash, Wallet — money you actually have and can spend.</td></tr>
+        <tr style="border-top:1px solid var(--line);"><td style="padding:10px 0;font-weight:600;">What you owe</td><td style="padding:10px 0;color:var(--ink-3);">Credit card, home loan — accounts that count against you, shown as what's still owed.</td></tr>
+        <tr style="border-top:1px solid var(--line);"><td style="padding:10px 0;font-weight:600;">Money lent</td><td style="padding:10px 0;color:var(--ink-3);">A running tally of everything people currently owe you (see the Money Lent section below).</td></tr>
+        <tr style="border-top:1px solid var(--line);"><td style="padding:10px 0;font-weight:600;">Somewhere else</td><td style="padding:10px 0;color:var(--ink-3);">A holding spot for money you've moved out to something untracked, like an investment.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin:32px 0;">
+    <div style="font-size:13px;font-weight:600;color:var(--ink-4);margin-bottom:4px;">A simple example</div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;">
+      <div style="background:var(--s1);border:1px solid var(--line);border-radius:10px;padding:12px 20px;text-align:center;"><div style="font-weight:600;font-size:14px;">Bank</div><div style="font-family:'Public Sans';font-variant-numeric:tabular-nums;font-size:15px;margin-top:2px;">₹40,000</div></div>
+      <div style="background:var(--s1);border:1px solid var(--line);border-radius:10px;padding:12px 20px;text-align:center;"><div style="font-weight:600;font-size:14px;">Cash</div><div style="font-family:'Public Sans';font-variant-numeric:tabular-nums;font-size:15px;margin-top:2px;">₹5,000</div></div>
+      <div style="background:var(--s1);border:1px solid var(--line);border-radius:10px;padding:12px 20px;text-align:center;"><div style="font-weight:600;font-size:14px;">Money Lent</div><div style="font-family:'Public Sans';font-variant-numeric:tabular-nums;font-size:15px;margin-top:2px;color:var(--accent);">₹8,000 owed to you</div></div>
+      <div style="background:var(--inverse-bg);color:var(--inverse-fg);border-radius:10px;padding:12px 20px;text-align:center;"><div style="font-weight:600;font-size:14px;opacity:.85;">You have</div><div style="font-family:'Public Sans';font-variant-numeric:tabular-nums;font-size:15px;margin-top:2px;">₹53,000</div></div>
+    </div>
+    <p style="font-size:13.5px;color:var(--ink-4);text-align:center;max-width:480px;margin-top:8px;">Money you've lent counts toward what you have, the same way a loan you owe counts against you — lending doesn't change your net worth, only who's holding it.</p>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:14px;">
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">How do I check a balance is right?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">Open an account and tap <strong>Check this balance</strong>. Enter what you actually counted — if it matches, mark it checked. If it doesn't, the app offers to record the gap as spending it missed, so your numbers stay honest without you hunting for a lost receipt.</p></div>
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">What does "Private" mean?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">A private account (like your salary bank account by default) is left out of the totals shown on Home and Plan. Its balance is still visible if you open Accounts directly — it's hidden from summaries, not locked away.</p></div>
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">Can I add or archive an account?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">Yes — tap <strong>Add an account</strong> from the bottom of the list, or open an account and choose <strong>Archive or rename</strong>. An account with no history can be deleted outright; one with history can only be archived, so old transactions still make sense.</p></div>
+  </div>
+</div>
+</section>
+
+<!-- ============ TRANSACTIONS ============ -->
+<section id="transactions" style="max-width:760px;margin:0 auto;padding:64px 28px;">
+  <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">What happened to your money</div>
+  <h2 class="serif" style="font-size:32px;font-weight:600;margin:0 0 16px;">Transactions</h2>
+  <p style="font-size:17px;line-height:1.65;color:var(--ink-2);margin:0 0 24px;text-wrap:pretty;">A transaction is one recorded event: money that came in, money that went out, or money that moved between two of your own accounts. Every one lives on the Transactions tab, newest first, grouped by day.</p>
+
+  <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:28px;">
+    <div style="display:flex;gap:16px;align-items:center;background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:16px 18px;">
+      <div style="flex:none;width:88px;font-weight:700;font-size:14px;color:var(--good);">Received</div>
+      <div style="font-size:14.5px;color:var(--ink-3);flex:1;">Salary, a refund, a side payment. Example: Salary → <strong>+₹50,000</strong></div>
+    </div>
+    <div style="display:flex;gap:16px;align-items:center;background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:16px 18px;">
+      <div style="flex:none;width:88px;font-weight:700;font-size:14px;color:var(--ink);">Spent</div>
+      <div style="font-size:14.5px;color:var(--ink-3);flex:1;">Groceries, rent, a bill. Example: Groceries → <strong>−₹1,200</strong></div>
+    </div>
+    <div style="display:flex;gap:16px;align-items:center;background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:16px 18px;">
+      <div style="flex:none;width:88px;font-weight:700;font-size:14px;color:var(--accent);">Moved</div>
+      <div style="font-size:14.5px;color:var(--ink-3);flex:1;">Between two accounts you own. Example: Bank → Savings, <strong>₹10,000</strong></div>
+    </div>
+  </div>
+
+  <div style="background:var(--s2);border-radius:14px;padding:24px;margin-bottom:28px;">
+    <div style="font-weight:700;font-size:15px;margin-bottom:10px;">An important distinction</div>
+    <p style="margin:0 0 14px;font-size:15px;color:var(--ink-2);">Moving ₹10,000 from your bank to your savings is <em>not</em> spending ₹10,000 — it's the same money, just in a different place.</p>
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;">
+      <div style="text-align:center;"><div style="font-size:13px;font-weight:600;">Bank</div><div style="font-size:15px;font-family:'Public Sans';">₹50,000</div></div>
+      <div style="font-size:20px;color:var(--accent);">→ ₹10,000 →</div>
+      <div style="text-align:center;"><div style="font-size:13px;font-weight:600;">Savings</div><div style="font-size:15px;font-family:'Public Sans';">₹10,000</div></div>
+    </div>
+    <p style="text-align:center;margin:12px 0 0;font-size:14px;font-weight:600;color:var(--accent);">You still have ₹60,000 total. The money simply changed location.</p>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:14px;">
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">How do I record something?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">Tap the round <strong>+</strong> button. Choose Spent, Received, or Moved, type the amount on the number pad, pick a category (and account), then save. Payee and a note are optional, tucked under "Show payee and note."</p></div>
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">What if I bought something and later got money back?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">Open the original purchase and choose <strong>Mark money came back</strong> — partial or full. It reduces that category's spending for the month; it is never counted as separate income.</p></div>
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">Can one payment cover two categories?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">Yes — open the transaction and choose <strong>Split across categories</strong>. You divide the amount across up to four categories; the parts always add back up to the original, to the rupee.</p></div>
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">What does a transaction's detail screen show?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">When it happened, the category, payee, which account it touched, any note, whether it's a must-pay or flexible cost, and whether it's linked to a bill, a split, or a refund. From there you can edit, delete, duplicate to today, or mark it a one-off.</p></div>
+  </div>
+</section>
+
+<!-- ============ INCOME & SPENDING + CATEGORIES ============ -->
+<section id="categories" style="background:var(--s2);padding:64px 0;">
+<div style="max-width:760px;margin:0 auto;padding:0 28px;">
+  <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Making sense of it</div>
+  <h2 class="serif" style="font-size:32px;font-weight:600;margin:0 0 16px;">Income, spending, and categories</h2>
+  <p style="font-size:17px;line-height:1.65;color:var(--ink-2);margin:0 0 20px;text-wrap:pretty;"><strong>Income</strong> is money you receive — salary, a side project, a refund. <strong>Spending</strong> is money you actually use to buy something. Every spending transaction gets a <strong>category</strong>: a label like "Food & Groceries" or "Bills & Utilities" that says what it was for.</p>
+
+  <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin:24px 0;flex-wrap:wrap;">
+    <div style="background:var(--s1);border:1px solid var(--line);border-radius:10px;padding:14px 22px;text-align:center;"><div style="font-family:'Public Sans';font-size:16px;font-weight:600;">₹1,500 spent</div></div>
+    <div style="font-size:20px;color:var(--accent);">↓</div>
+    <div style="background:var(--s1);border:1px solid var(--line);border-radius:10px;padding:14px 22px;text-align:center;"><div style="font-weight:700;font-size:15px;">Fresh Mart</div><div style="font-size:12.5px;color:var(--ink-4);">payee</div></div>
+    <div style="font-size:20px;color:var(--accent);">↓</div>
+    <div style="background:var(--accent);color:#fff;border-radius:10px;padding:14px 22px;text-align:center;"><div style="font-weight:700;font-size:15px;">Food & Groceries</div><div style="font-size:12.5px;opacity:.85;">category</div></div>
+  </div>
+
+  <div style="background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:24px;margin-bottom:24px;">
+    <div style="font-weight:700;font-size:15px;margin-bottom:12px;">The categories already set up</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+      <span style="background:var(--s2);border-radius:100px;padding:6px 12px;font-size:13px;">Food & Groceries</span>
+      <span style="background:var(--s2);border-radius:100px;padding:6px 12px;font-size:13px;">Eating Out</span>
+      <span style="background:var(--s2);border-radius:100px;padding:6px 12px;font-size:13px;">Transport</span>
+      <span style="background:var(--s2);border-radius:100px;padding:6px 12px;font-size:13px;">Home & Rent</span>
+      <span style="background:var(--s2);border-radius:100px;padding:6px 12px;font-size:13px;">Bills & Utilities</span>
+      <span style="background:var(--s2);border-radius:100px;padding:6px 12px;font-size:13px;">Health</span>
+      <span style="background:var(--s2);border-radius:100px;padding:6px 12px;font-size:13px;">Shopping</span>
+      <span style="background:var(--s2);border-radius:100px;padding:6px 12px;font-size:13px;">Entertainment</span>
+      <span style="background:var(--s2);border-radius:100px;padding:6px 12px;font-size:13px;">Subscriptions</span>
+      <span style="background:var(--s2);border-radius:100px;padding:6px 12px;font-size:13px;">Family & Gifts</span>
+      <span style="background:var(--s2);border-radius:100px;padding:6px 12px;font-size:13px;">EMI & Loans</span>
+      <span style="background:var(--s2);border-radius:100px;padding:6px 12px;font-size:13px;">Other</span>
+      <span style="background:var(--s2);border-radius:100px;padding:6px 12px;font-size:13px;">Salary (income)</span>
+      <span style="background:var(--s2);border-radius:100px;padding:6px 12px;font-size:13px;">Other Income</span>
+    </div>
+    <p style="font-size:13.5px;color:var(--ink-4);margin:14px 0 0;">You can create your own too — tap <strong>Create a category</strong> from the Categories screen. Renaming one keeps every past transaction attached to it.</p>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:14px;">
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">What does "Must-pay" vs "Flexible" mean?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">Some categories — rent, bills, health, EMI — are marked <strong>Must-pay</strong>, money you'd struggle to skip. Everything else is <strong>Flexible</strong>, spending you choose month to month. Reports split totals by these two groups so you can see how much of your money is actually optional.</p></div>
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">What does "repeats" mean on a category?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">It's a hint that spending in that category tends to happen every month — useful context, separate from Regular Bills (see Plan, below), which actually reminds you of specific due dates.</p></div>
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">How do categories show up elsewhere?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">Reports break every period down by category, biggest first. Spending limits (in Plan) are set per category. And two special categories appear automatically: <strong>Interest & charges</strong> for loan interest, and <strong>Not recorded</strong> for gaps a balance check turns up.</p></div>
+  </div>
+</div>
+</section>
+
+<!-- ============ DASHBOARD ============ -->
+<section id="dashboard" style="max-width:760px;margin:0 auto;padding:64px 28px;">
+  <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Your financial snapshot</div>
+  <h2 class="serif" style="font-size:32px;font-weight:600;margin:0 0 16px;">Home (the dashboard)</h2>
+  <p style="font-size:17px;line-height:1.65;color:var(--ink-2);margin:0 0 24px;text-wrap:pretty;">Home is the first thing you see when you open the app. It's built to answer "where do I stand right now?" in a glance, without digging through menus.</p>
+
+  <div style="display:flex;flex-direction:column;gap:14px;">
+    <div style="background:var(--s2);border-radius:12px;padding:18px 20px;">
+      <div style="font-weight:700;font-size:15px;">Money available</div>
+      <p style="margin:6px 0 0;font-size:14.5px;color:var(--ink-3);">The total across your everyday accounts (private accounts, if any, are left out of this figure — and it says so). Tap it to open Accounts.</p>
+    </div>
+    <div style="background:var(--s2);border-radius:12px;padding:18px 20px;">
+      <div style="font-weight:700;font-size:15px;">Left to spend this month</div>
+      <p style="margin:6px 0 0;font-size:14.5px;color:var(--ink-3);">Money available, minus bills still to come this month, minus a buffer you've chosen to keep back. This is the number most worth watching day to day.</p>
+    </div>
+    <div style="background:var(--s2);border-radius:12px;padding:18px 20px;">
+      <div style="font-weight:700;font-size:15px;">Spent so far this month</div>
+      <p style="margin:6px 0 0;font-size:14.5px;color:var(--ink-3);">Compared, once you have enough history, against a typical month by the same day — "₹3,400 more than a typical month by day 16," for example.</p>
+    </div>
+    <div style="background:var(--s2);border-radius:12px;padding:18px 20px;">
+      <div style="font-weight:700;font-size:15px;">One insight card</div>
+      <p style="margin:6px 0 0;font-size:14.5px;color:var(--ink-3);">A single, changing observation — a category running unusually high, a bill that got more expensive, spending recorded is looking thin. Each comes with an action, and a "Not useful" button if it isn't.</p>
+    </div>
+  </div>
+  <p style="font-size:14px;color:var(--ink-4);margin-top:18px;">In your first month, you'll see facts only — no comparisons yet. That's deliberate: the app waits until it has enough of your own history (three complete months of recording) before comparing anything, so it's never guessing.</p>
+</section>
+
+<!-- ============ PLAN / BUDGETS ============ -->
+<section id="plan" style="background:var(--s2);padding:64px 0;">
+<div style="max-width:760px;margin:0 auto;padding:0 28px;">
+  <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Deciding ahead of time</div>
+  <h2 class="serif" style="font-size:32px;font-weight:600;margin:0 0 16px;">Plan: bills and spending limits</h2>
+  <p style="font-size:17px;line-height:1.65;color:var(--ink-2);margin:0 0 24px;text-wrap:pretty;">The Plan tab is where you look forward instead of back. It has two ideas: <strong>regular bills</strong>, things you already know are coming, and <strong>spending limits</strong>, a target you set for yourself.</p>
+
+  <div style="font-weight:700;font-size:16px;margin-bottom:10px;">The maths behind "left to spend"</div>
+  <div style="background:var(--s1);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:28px;">
+    <div style="display:flex;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--line);"><span style="font-size:14.5px;">Money available</span><span style="font-family:'Public Sans';font-weight:600;">₹40,000</span></div>
+    <div style="display:flex;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--line);"><span style="font-size:14.5px;">− Bills still to come this month</span><span style="font-family:'Public Sans';font-weight:600;">−₹18,000</span></div>
+    <div style="display:flex;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--line);"><span style="font-size:14.5px;">− Buffer you asked to keep back</span><span style="font-family:'Public Sans';font-weight:600;">−₹2,000</span></div>
+    <div style="display:flex;justify-content:space-between;padding:16px 20px;background:var(--s2);"><span style="font-size:15px;font-weight:700;">= Left to spend</span><span style="font-family:'Public Sans';font-weight:700;">₹20,000</span></div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:14px;">
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">What's a regular bill?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">A memory aid for things that repeat — rent, a subscription, an electricity bill — with a name, category, rough amount, how often, and a due day. The app never pays it for you; it just matches it against a real transaction you record with a similar payee and amount near the due date, so you can see at a glance what's paid and what's still coming.</p></div>
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">How do I set a spending limit?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">In Plan, open <strong>Spending limits</strong>, pick a category without a limit yet, and set an amount. From day 5 of the month, the app shows whether you're on pace, ahead of pace, or already over — but a limit is a target you set for yourself, never something the app enforces or blocks.</p></div>
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">What happens if I go over a limit?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">Nothing is stopped. The bar for that category turns amber and says how much over you are — purely informational, so you can decide what to do about it.</p></div>
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">What's the "buffer"?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">A cushion you choose to hold back from "left to spend," for peace of mind. Change it any time from Preferences.</p></div>
+  </div>
+
+  <div style="margin-top:28px;">
+    <div style="font-size:15px;font-weight:700;margin-bottom:10px;">Example</div>
+    <p style="margin:0;font-size:15px;color:var(--ink-3);background:var(--s1);border-radius:12px;padding:16px 20px;">You decide you want to spend no more than ₹8,000 on Food this month. Two weeks in you've spent ₹5,200 — the limit bar shows ₹2,800 remaining and "On pace." Nothing is blocked either way; it's simply there for you to check.</p>
+  </div>
+</div>
+</section>
+
+<!-- ============ MONEY LENT ============ -->
+<section id="lending" style="max-width:760px;margin:0 auto;padding:64px 28px;">
+  <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Money others owe you</div>
+  <h2 class="serif" style="font-size:32px;font-weight:600;margin:0 0 16px;">Money Lent</h2>
+  <p style="font-size:18px;line-height:1.6;font-weight:600;color:var(--ink);margin:0 0 20px;text-wrap:pretty;">The single most important thing to understand: money you lend someone is not the same as money you spend.</p>
+  <p style="font-size:16px;line-height:1.65;color:var(--ink-2);margin:0 0 28px;text-wrap:pretty;">When you lend money, it leaves your account, but it doesn't disappear — it becomes something someone owes you, which the app calls a <strong>receivable</strong>. It still counts as part of what you have; it's just being held by someone else for now.</p>
+
+  <div style="background:var(--s2);border-radius:14px;padding:24px;margin-bottom:28px;">
+    <div style="font-weight:700;font-size:15px;margin-bottom:14px;">Before and after lending ₹10,000 to Rahul</div>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:200px;">
+        <div style="font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-4);margin-bottom:8px;">Before</div>
+        <div style="display:flex;justify-content:space-between;font-size:14.5px;padding:6px 0;"><span>Your bank</span><span style="font-family:'Public Sans';">₹50,000</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:14.5px;padding:6px 0;"><span>Owed to you</span><span style="font-family:'Public Sans';">₹0</span></div>
+      </div>
+      <div style="flex:1;min-width:200px;">
+        <div style="font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-4);margin-bottom:8px;">After</div>
+        <div style="display:flex;justify-content:space-between;font-size:14.5px;padding:6px 0;"><span>Your bank</span><span style="font-family:'Public Sans';">₹40,000</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:14.5px;padding:6px 0;"><span>Rahul owes you</span><span style="font-family:'Public Sans';color:var(--accent);">₹10,000</span></div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-weight:700;font-size:14.5px;">Total value: still ₹50,000 — nothing was spent</div>
+  </div>
+
+  <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:28px;">
+    <div style="flex:1;min-width:260px;background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:18px 20px;">
+      <div style="font-weight:700;font-size:15px;margin-bottom:6px;">Interest-free loan</div>
+      <p style="margin:0;font-size:14.5px;color:var(--ink-3);">Rahul owes you exactly what you lent him — no more, no less.</p>
+    </div>
+    <div style="flex:1;min-width:260px;background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:18px 20px;">
+      <div style="font-weight:700;font-size:15px;margin-bottom:6px;">Interest-bearing loan</div>
+      <p style="margin:0;font-size:14.5px;color:var(--ink-3);">You set a yearly rate. Interest builds up quietly day by day on the amount still outstanding.</p>
+    </div>
+  </div>
+
+  <div style="background:var(--s2);border-radius:14px;padding:20px 24px;margin-bottom:28px;">
+    <div style="font-weight:700;font-size:14.5px;margin-bottom:10px;">Interest example</div>
+    <div style="display:flex;justify-content:space-between;font-size:14.5px;padding:5px 0;"><span>Original amount</span><span style="font-family:'Public Sans';">₹10,000</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:14.5px;padding:5px 0;border-bottom:1px solid var(--line);"><span>Interest accrued so far</span><span style="font-family:'Public Sans';">₹300</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:15px;padding:8px 0 0;font-weight:700;"><span>Currently owed</span><span style="font-family:'Public Sans';">₹10,300</span></div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:14px;">
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">How do I add a loan?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">Settings → Accounts → Money Lent → <strong>Add a loan</strong>. Enter who you lent it to, how much, which account it came from, and whether it's interest-free or carries a rate. You can add an optional due date and a note.</p></div>
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">How do repayments work?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">Open the loan and choose <strong>Record repayment</strong>, then enter the amount — or tap "Pay in full" for the exact total owed. If interest has built up, the app pays that off first, then reduces the original amount; you never have to work out the split yourself.</p></div>
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">What does each loan status mean?</div><p style="margin:0;color:var(--ink-3);font-size:15px;"><strong>Active</strong> — nothing repaid yet. <strong>Partially repaid</strong> — some has come back. <strong>Fully repaid</strong> — nothing outstanding. <strong>Overdue</strong> — past its due date with a balance remaining. <strong>Written off</strong> — you've marked it as lost.</p></div>
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">What if the money is never coming back?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">Open the loan and choose <strong>Write off this loan</strong>. The outstanding amount is recorded as a real expense (under "Lending write-off"), since it genuinely won't return — this is the one case where a loan does eventually become a loss.</p></div>
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">Does interest count as income?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">Only once it's actually repaid — interest that has merely accrued isn't counted as money you've made until it's really in your hands.</p></div>
+  </div>
+
+  <!-- Repayments visual -->
+  <div id="repayments" style="margin-top:32px;background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:24px;">
+    <div style="font-weight:700;font-size:15px;margin-bottom:14px;">Partial repayment, visually</div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;text-align:center;">
+      <div><div style="font-size:14px;font-weight:600;">Rahul owes you</div><div style="font-family:'Public Sans';font-size:17px;">₹10,000</div></div>
+      <div style="font-size:20px;color:var(--accent);">− ₹3,000 →</div>
+      <div><div style="font-size:14px;font-weight:600;">Rahul now owes you</div><div style="font-family:'Public Sans';font-size:17px;">₹7,000</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REPORTS ============ -->
+<section id="reports" style="background:var(--s2);padding:64px 0;">
+<div style="max-width:760px;margin:0 auto;padding:0 28px;">
+  <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Reading your own history</div>
+  <h2 class="serif" style="font-size:32px;font-weight:600;margin:0 0 16px;">Reports & charts</h2>
+  <p style="font-size:17px;line-height:1.65;color:var(--ink-2);margin:0 0 28px;text-wrap:pretty;">Reports read your own numbers back to you — never advice, never a verdict. Everything here can be filtered by This Month, Last 3 Months, Last 6 Months, 1 Year, or All Time.</p>
+
+  <div style="display:flex;flex-direction:column;gap:16px;">
+    <div style="background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:20px 22px;">
+      <div style="font-weight:700;font-size:15.5px;margin-bottom:6px;">Overview</div>
+      <div style="font-size:14px;color:var(--ink-4);margin-bottom:8px;">Answers: how much did I spend, where did it go, and what's the trend?</div>
+      <p style="margin:0;font-size:14.5px;color:var(--ink-3);">Money in vs out for the period, every category as a bar (biggest first), a must-pay/flexible split, a line chart of income vs expenses over time, and a daily spending calendar you can tap into.</p>
+    </div>
+    <div style="background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:20px 22px;">
+      <div style="font-weight:700;font-size:15.5px;margin-bottom:6px;">Where it goes</div>
+      <div style="font-size:14px;color:var(--ink-4);margin-bottom:8px;">Answers: which few categories eat most of my spending?</div>
+      <p style="margin:0;font-size:14.5px;color:var(--ink-3);">Your top three categories as a share of total spending, plus the full category breakdown for any month.</p>
+    </div>
+    <div style="background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:20px 22px;">
+      <div style="font-weight:700;font-size:15.5px;margin-bottom:6px;">Limits</div>
+      <div style="font-size:14px;color:var(--ink-4);margin-bottom:8px;">Answers: am I on track against the limits I set?</div>
+      <p style="margin:0;font-size:14.5px;color:var(--ink-3);">Every limit as a bar — how much spent, how much left, and whether you're ahead of, on, or behind pace this month.</p>
+    </div>
+    <div style="background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:20px 22px;">
+      <div style="font-weight:700;font-size:15.5px;margin-bottom:6px;">What changed</div>
+      <div style="font-size:14px;color:var(--ink-4);margin-bottom:8px;">Answers: what's different about this month compared with normal?</div>
+      <p style="margin:0;font-size:14.5px;color:var(--ink-3);">Categories that moved noticeably against your own typical month, and any that have been steadily rising or falling for several months in a row. Needs at least three good months of history before it appears.</p>
+    </div>
+    <div style="background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:20px 22px;">
+      <div style="font-weight:700;font-size:15.5px;margin-bottom:6px;">Regular bills</div>
+      <div style="font-size:14px;color:var(--ink-4);margin-bottom:8px;">Answers: what repeats, what's due, and has anything gone up in price?</div>
+      <p style="margin:0;font-size:14.5px;color:var(--ink-3);">Every bill this month with its status — paid, due, or overdue — and a heads-up whenever one has gotten more expensive.</p>
+    </div>
+    <div style="background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:20px 22px;">
+      <div style="font-weight:700;font-size:15.5px;margin-bottom:6px;">Drifting categories</div>
+      <div style="font-size:14px;color:var(--ink-4);margin-bottom:8px;">Answers: what's slowly changed over months, even if no single month stood out?</div>
+      <p style="margin:0;font-size:14.5px;color:var(--ink-3);">Categories that have steadily crept up or down over six months — the kind of change too gradual to notice month to month.</p>
+    </div>
+  </div>
+  <p style="font-size:14px;color:var(--ink-4);margin-top:18px;">A monthly review appears automatically once a month closes, summarising it in one place. Any report can be saved as a PDF from the button at the bottom of Reports.</p>
+</div>
+</section>
+
+<!-- ============ SEARCH & FILTERS / EDITING ============ -->
+<section id="search" style="max-width:760px;margin:0 auto;padding:64px 28px;">
+  <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Finding things</div>
+  <h2 class="serif" style="font-size:32px;font-weight:600;margin:0 0 16px;">Search, filters, and fixing mistakes</h2>
+
+  <div style="margin-bottom:32px;">
+    <div style="font-weight:700;font-size:16px;margin-bottom:10px;">"How do I find everything I spent on food last month?"</div>
+    <ol style="margin:0;padding-left:20px;color:var(--ink-3);font-size:15px;line-height:1.8;">
+      <li>Open the <strong>Transactions</strong> tab</li>
+      <li>Tap the category row and choose <strong>Food & Groceries</strong></li>
+      <li>Tap the "Last month" chip in the filter row</li>
+    </ol>
+    <p style="margin:10px 0 0;font-size:14.5px;color:var(--ink-4);">You can also type into the search box — it matches payee, note, category name, or the amount itself — and filter by Spent, Received, Moved, Came back, a specific account, or a specific payee at the same time.</p>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:14px;">
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">What can I edit?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">Almost anything on a transaction — amount, category, account, date, payee, note — by opening it and tapping <strong>Edit</strong>, which reopens the same entry screen pre-filled.</p></div>
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">What happens when I delete something?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">A confirmation appears first. Once deleted, most actions offer a brief <strong>Undo</strong> in a small toast at the bottom of the screen.</p></div>
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">What if a whole account balance looks wrong?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">Use <strong>Check this balance</strong> on that account (see Accounts, above) rather than editing individual transactions — it finds the gap and records it in one step, filed under "Not recorded" so it never hides inside a real category.</p></div>
+    <div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">Can I mark a one-off as not typical?</div><p style="margin:0;color:var(--ink-3);font-size:15px;">Yes — open the transaction and choose <strong>Mark as a one-off</strong>. It's then left out of "typical month" comparisons elsewhere, so a single unusual purchase doesn't skew every future comparison.</p></div>
+  </div>
+</section>
+
+<!-- ============ REAL-LIFE EXAMPLES ============ -->
+<section style="background:var(--s2);padding:64px 0;">
+<div style="max-width:760px;margin:0 auto;padding:0 28px;">
+  <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Putting it together</div>
+  <h2 class="serif" style="font-size:32px;font-weight:600;margin:0 0 28px;">What can I do in real life?</h2>
+  <div style="display:flex;flex-direction:column;gap:16px;">
+    <div style="background:var(--s1);border-radius:12px;padding:18px 22px;">
+      <div style="font-weight:700;font-size:15px;margin-bottom:6px;">"I just received my salary."</div>
+      <p style="margin:0;font-size:14.5px;color:var(--ink-3);">Tap + → Received → enter the amount → category "Salary" → choose the account it landed in → Save.</p>
+    </div>
+    <div style="background:var(--s1);border-radius:12px;padding:18px 22px;">
+      <div style="font-weight:700;font-size:15px;margin-bottom:6px;">"I bought groceries."</div>
+      <p style="margin:0;font-size:14.5px;color:var(--ink-3);">Tap + → Spent → enter the amount → category "Food & Groceries" → the account you paid from → Save.</p>
+    </div>
+    <div style="background:var(--s1);border-radius:12px;padding:18px 22px;">
+      <div style="font-weight:700;font-size:15px;margin-bottom:6px;">"I moved money to savings."</div>
+      <p style="margin:0;font-size:14.5px;color:var(--ink-3);">Tap + → Moved → enter the amount → From your bank, To savings → Save. This never counts as spending.</p>
+    </div>
+    <div style="background:var(--s1);border-radius:12px;padding:18px 22px;">
+      <div style="font-weight:700;font-size:15px;margin-bottom:6px;">"I lent ₹5,000 to my friend."</div>
+      <p style="margin:0;font-size:14.5px;color:var(--ink-3);">Settings → Accounts → Money Lent → Add a loan → name your friend, ₹5,000, choose interest-free or a rate, pick the account it came from → Save.</p>
+    </div>
+    <div style="background:var(--s1);border-radius:12px;padding:18px 22px;">
+      <div style="font-weight:700;font-size:15px;margin-bottom:6px;">"My friend paid me back ₹2,000."</div>
+      <p style="margin:0;font-size:14.5px;color:var(--ink-3);">Open their loan under Money Lent → Record repayment → ₹2,000 → Save. Interest owed, if any, is settled first automatically.</p>
+    </div>
+    <div style="background:var(--s1);border-radius:12px;padding:18px 22px;">
+      <div style="font-weight:700;font-size:15px;margin-bottom:6px;">"I want to know where I spent the most this month."</div>
+      <p style="margin:0;font-size:14.5px;color:var(--ink-3);">Reports → Overview → pick Last 3 Months (or longer) → tap a month under Period breakdown. Your categories appear as bars, biggest first.</p>
+    </div>
+    <div style="background:var(--s1);border-radius:12px;padding:18px 22px;">
+      <div style="font-weight:700;font-size:15px;margin-bottom:6px;">"I want to know how much money I have."</div>
+      <p style="margin:0;font-size:14.5px;color:var(--ink-3);">Home shows "Money available" at the top, or open Accounts for the full breakdown, including what's owed to you and what you owe.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ============ HOW IT ALL CONNECTS ============ -->
+<section style="max-width:900px;margin:0 auto;padding:64px 28px;">
+  <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;text-align:center;">The big picture</div>
+  <h2 class="serif" style="font-size:32px;font-weight:600;margin:0 0 32px;text-align:center;">How everything connects</h2>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
+    <div style="background:var(--inverse-bg);color:var(--inverse-fg);padding:14px 24px;border-radius:10px;font-weight:600;font-size:15px;">Money comes in or is already in an account</div>
+    <div style="width:2px;height:26px;background:var(--line);"></div>
+    <div style="display:flex;gap:18px;flex-wrap:wrap;justify-content:center;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <div style="background:var(--s1);border:1px solid var(--line);border-radius:10px;padding:12px 18px;font-weight:600;font-size:14px;">Spending</div>
+        <div style="width:2px;height:20px;background:var(--line);"></div>
+        <div style="background:var(--s2);border-radius:8px;padding:8px 14px;font-size:13px;">Sorted into a Category</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <div style="background:var(--s1);border:1px solid var(--line);border-radius:10px;padding:12px 18px;font-weight:600;font-size:14px;">Saving / moving</div>
+        <div style="width:2px;height:20px;background:var(--line);"></div>
+        <div style="background:var(--s2);border-radius:8px;padding:8px 14px;font-size:13px;">Another account</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <div style="background:var(--s1);border:1px solid var(--line);border-radius:10px;padding:12px 18px;font-weight:600;font-size:14px;">Lending</div>
+        <div style="width:2px;height:20px;background:var(--line);"></div>
+        <div style="background:var(--s2);border-radius:8px;padding:8px 14px;font-size:13px;">Money Lent</div>
+      </div>
+    </div>
+    <div style="width:2px;height:26px;background:var(--line);"></div>
+    <div style="background:var(--accent);color:#fff;padding:14px 24px;border-radius:10px;font-weight:600;font-size:15px;">Reports & Home — understand what happened</div>
+  </div>
+</section>
+
+<!-- ============ GLOSSARY & MISTAKES ============ -->
+<section style="background:var(--s2);padding:64px 0;">
+<div style="max-width:760px;margin:0 auto;padding:0 28px;display:flex;flex-direction:column;gap:56px;">
+  <div>
+    <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Easy to get wrong</div>
+    <h2 class="serif" style="font-size:28px;font-weight:600;margin:0 0 20px;">A few common mistakes</h2>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div style="background:var(--s1);border-radius:12px;padding:16px 20px;"><strong>Don't record a transfer as spending.</strong><p style="margin:6px 0 0;font-size:14.5px;color:var(--ink-3);">Moving money between your own accounts should always use "Moved," not "Spent" — otherwise your spending totals look bigger than they really are.</p></div>
+      <div style="background:var(--s1);border-radius:12px;padding:16px 20px;"><strong>Don't record money you lend a friend as an expense.</strong><p style="margin:6px 0 0;font-size:14.5px;color:var(--ink-3);">Use Add a loan under Money Lent — it leaves your everyday spending totals untouched and tracks the amount as something owed to you instead.</p></div>
+      <div style="background:var(--s1);border-radius:12px;padding:16px 20px;"><strong>Don't add the same repayment twice.</strong><p style="margin:6px 0 0;font-size:14.5px;color:var(--ink-3);">Each loan's repayment history is visible on its detail screen — check there before recording another one.</p></div>
+      <div style="background:var(--s1);border-radius:12px;padding:16px 20px;"><strong>Don't ignore a balance check gap.</strong><p style="margin:6px 0 0;font-size:14.5px;color:var(--ink-3);">If your actual bank balance doesn't match what the app expects, use "Check this balance" rather than editing old transactions to force a match — it keeps a clean, honest trail.</p></div>
+    </div>
+  </div>
+
+  <div id="glossary">
+    <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">A few words, plainly</div>
+    <h2 class="serif" style="font-size:28px;font-weight:600;margin:0 0 20px;">Small glossary</h2>
+    <div style="background:var(--s1);border-radius:14px;overflow:hidden;">
+      <div style="padding:16px 20px;border-bottom:1px solid var(--line);"><strong>Balance</strong> — how much money is currently recorded in an account.</div>
+      <div style="padding:16px 20px;border-bottom:1px solid var(--line);"><strong>Transaction</strong> — a record of money coming in, going out, or moving between accounts.</div>
+      <div style="padding:16px 20px;border-bottom:1px solid var(--line);"><strong>Receivable</strong> — money someone else owes you; what's tracked under Money Lent.</div>
+      <div style="padding:16px 20px;border-bottom:1px solid var(--line);"><strong>Interest</strong> — extra money owed because money was lent for a period of time, growing daily on an interest-bearing loan.</div>
+      <div style="padding:16px 20px;border-bottom:1px solid var(--line);"><strong>Outstanding</strong> — how much of a loan or bill still hasn't been paid.</div>
+      <div style="padding:16px 20px;"><strong>Typical month</strong> — the middle value from your own recent history, used for honest comparisons instead of guesses.</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ============ QUICK REFERENCE ============ -->
+<section id="reference" style="max-width:760px;margin:0 auto;padding:64px 28px;">
+  <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">The shortest version</div>
+  <h2 class="serif" style="font-size:32px;font-weight:600;margin:0 0 24px;">If you want to do X → go here</h2>
+  <div style="border:1px solid var(--line);border-radius:14px;overflow:hidden;">
+    <table style="width:100%;border-collapse:collapse;font-size:15px;">
+      <tbody>
+        <tr style="background:var(--s2);"><td style="padding:14px 18px;font-weight:600;">See my money</td><td style="padding:14px 18px;color:var(--ink-3);">Home, or Accounts</td></tr>
+        <tr><td style="padding:14px 18px;font-weight:600;">Record spending or income</td><td style="padding:14px 18px;color:var(--ink-3);">The + button, anywhere</td></tr>
+        <tr style="background:var(--s2);"><td style="padding:14px 18px;font-weight:600;">Move money between my accounts</td><td style="padding:14px 18px;color:var(--ink-3);">+ → Moved</td></tr>
+        <tr><td style="padding:14px 18px;font-weight:600;">See my spending habits</td><td style="padding:14px 18px;color:var(--ink-3);">Reports</td></tr>
+        <tr style="background:var(--s2);"><td style="padding:14px 18px;font-weight:600;">Plan ahead / set a limit</td><td style="padding:14px 18px;color:var(--ink-3);">Plan</td></tr>
+        <tr><td style="padding:14px 18px;font-weight:600;">Track money someone owes me</td><td style="padding:14px 18px;color:var(--ink-3);">Settings → Accounts → Money Lent</td></tr>
+        <tr style="background:var(--s2);"><td style="padding:14px 18px;font-weight:600;">Find an old transaction</td><td style="padding:14px 18px;color:var(--ink-3);">Transactions → search or filters</td></tr>
+        <tr><td style="padding:14px 18px;font-weight:600;">Fix a wrong balance</td><td style="padding:14px 18px;color:var(--ink-3);">Open the account → Check this balance</td></tr>
+        <tr style="background:var(--s2);"><td style="padding:14px 18px;font-weight:600;">Manage categories or bills</td><td style="padding:14px 18px;color:var(--ink-3);">Settings</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ CAPABILITIES CHECKLIST ============ -->
+<section id="checklist" style="background:oklch(22% 0.02 60);color:oklch(96% 0.01 75);padding:72px 0;">
+<div style="max-width:800px;margin:0 auto;padding:0 28px;">
+  <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:oklch(75% 0.09 45);margin-bottom:12px;">Everything, in one place</div>
+  <h2 class="serif" style="font-size:32px;font-weight:600;margin:0 0 32px;color:#fff;">The complete capabilities checklist</h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:36px;" class="stack-mobile">
+    <div>
+      <div style="font-weight:700;font-size:15px;color:oklch(75% 0.09 45);margin-bottom:12px;">Manage your money</div>
+      <ul style="margin:0;padding-left:18px;font-size:14.5px;line-height:2;color:oklch(88% 0.01 75);">
+        <li>Add, archive, or rename an account</li>
+        <li>View every balance at a glance</li>
+        <li>Check a balance against reality</li>
+        <li>Mark an account private</li>
+        <li>Move money somewhere untracked</li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-weight:700;font-size:15px;color:oklch(75% 0.09 45);margin-bottom:12px;">Record activity</div>
+      <ul style="margin:0;padding-left:18px;font-size:14.5px;line-height:2;color:oklch(88% 0.01 75);">
+        <li>Add income, spending, or a transfer</li>
+        <li>Split one payment across categories</li>
+        <li>Mark money that came back (refund)</li>
+        <li>Duplicate a transaction to today</li>
+        <li>Edit or delete any transaction</li>
+        <li>Mark a purchase as a one-off</li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-weight:700;font-size:15px;color:oklch(75% 0.09 45);margin-bottom:12px;">Understand your finances</div>
+      <ul style="margin:0;padding-left:18px;font-size:14.5px;line-height:2;color:oklch(88% 0.01 75);">
+        <li>View the Home dashboard</li>
+        <li>See the Overview, spending trend, and calendar</li>
+        <li>See your top spending categories</li>
+        <li>See what changed vs a typical month</li>
+        <li>See drifting categories over time</li>
+        <li>See regular bills and price changes</li>
+        <li>Save any report as a PDF</li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-weight:700;font-size:15px;color:oklch(75% 0.09 45);margin-bottom:12px;">Money others owe you</div>
+      <ul style="margin:0;padding-left:18px;font-size:14.5px;line-height:2;color:oklch(88% 0.01 75);">
+        <li>Add a loan, interest-free or with a rate</li>
+        <li>Track interest as it accrues</li>
+        <li>Record a partial or full repayment</li>
+        <li>See status: active, overdue, repaid</li>
+        <li>Write off a loan that won't be repaid</li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-weight:700;font-size:15px;color:oklch(75% 0.09 45);margin-bottom:12px;">Plan ahead</div>
+      <ul style="margin:0;padding-left:18px;font-size:14.5px;line-height:2;color:oklch(88% 0.01 75);">
+        <li>Add a regular bill and its due day</li>
+        <li>Set a spending limit per category</li>
+        <li>See what's left to spend this month</li>
+        <li>Set a buffer to hold back</li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-weight:700;font-size:15px;color:oklch(75% 0.09 45);margin-bottom:12px;">Settings & your data</div>
+      <ul style="margin:0;padding-left:18px;font-size:14.5px;line-height:2;color:oklch(88% 0.01 75);">
+        <li>Create or edit categories</li>
+        <li>Change theme, decimals, month start</li>
+        <li>Set an app passcode</li>
+        <li>Use a home-screen widget</li>
+        <li>Back up, export, restore, or erase your data</li>
+        <li>Replay the getting-started tour</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</section>
+
+<footer style="padding:40px 28px;text-align:center;font-size:13px;color:var(--ink-4);background:var(--s1);">
+  Everything lives on your device — there's no account, no sync, and no bank connection. <a href="#navigation" style="margin-left:6px;">Back to the top ↑</a>
+</footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    let saved = 'light';
+    try { saved = localStorage.getItem('guideTheme') || 'light'; } catch (e) {}
+    this.state = { theme: saved };
+  }
+  renderVals() {
+    const dark = this.state.theme === 'dark';
+    return {
+      theme: this.state.theme,
+      themeLabel: dark ? 'Dark mode' : 'Light mode',
+      toggleTheme: () => {
+        const next = dark ? 'light' : 'dark';
+        try { localStorage.setItem('guideTheme', next); } catch (e) {}
+        this.setState({ theme: next });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>
