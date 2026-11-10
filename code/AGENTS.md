@@ -1,3 +1,5 @@
+**Build progress:** read `docs/build/PROGRESS.md` (repo root) first, then follow `docs/build/README.md`. Project rules in `.claude/CLAUDE.md` win over this file.
+
 This is an Expo/React Native mobile application. Prioritize mobile-first patterns, performance, and cross-platform compatibility.
 
 ## Expo has changed — do not trust your training data

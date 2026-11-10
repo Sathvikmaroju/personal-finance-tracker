@@ -1,0 +1,19 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "-e",
+              "const p=require('path').join(process.env.CLAUDE_PROJECT_DIR||'.','docs','build','PROGRESS.md');let t;try{t=require('fs').readFileSync(p,'utf8')}catch(e){t='docs/build/PROGRESS.md not found.'}process.stdout.write('BUILD TRACKER (follow the resume protocol in docs/build/README.md before other work):\\n\\n'+t)"
+            ],
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

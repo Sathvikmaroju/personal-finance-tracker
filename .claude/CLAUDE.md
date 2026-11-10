@@ -2,12 +2,15 @@
 
 Offline, manual-entry personal finance app for Android, India / INR. React Native + TypeScript (strict) via Expo SDK 58.
 
+**Build progress:** read `docs/build/PROGRESS.md` first, then follow the resume protocol in `docs/build/README.md`. Update the tracker after every step.
+
 ## Repo map
 
 ```
 docs/shared/        product, domain, UX and design-system specs (14)
 docs/engineering/   data model, invariants, architecture, tests, plan (19)
 docs/design/        design docs 29-33 + prototype/ (final phase 2A export)
+docs/build/         build tracker: PROGRESS.md, phase plans, per-task logs
 code/               the Expo app; layers under code/src/ per engineering doc 25 §11
 ```
 
@@ -91,7 +94,7 @@ npx expo-doctor         # check dependency and config issues
 
 ## Workflow
 
-- Work on a feature branch named `feat/<phase-or-feature>`, for example `feat/phase-1-foundation`. Never commit to `main` directly.
+- Until the P0 build is complete, all build work goes on one branch: `feat/app-build` (owner decision, 2026-11-10). It merges to `main` at the end, with approval. Never commit to `main` directly.
 - Write a failing test first. Use the acceptance tests in engineering doc 22 (IDs `T-nn`) as the source of test cases, and the datasets in engineering doc 23.
 - Run `npm test` and `npm run typecheck` before you call any task done. Quote the result.
 - Ask the owner before every commit and every push.
