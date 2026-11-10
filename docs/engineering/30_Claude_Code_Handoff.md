@@ -39,7 +39,7 @@ testfixtures/   deterministic generators for the doc 23 datasets
 
 Entities and their fields: doc 03. Conceptual meaning, lifecycle, and forbidden states: doc 02.
 
-`Money` is a value class over `Long` paise. **No floating-point type may appear in the money path** (INV-15) — this is a compile-time guarantee, not a code-review item.
+`Money` is a branded TypeScript type over an integer `number` of paise (doc 25 §2). **No fractional value may appear in the money path** (INV-15). The brand makes it a compile-time guarantee that raw numbers cannot enter the money path; every `Money` constructor and operation also asserts `Number.isSafeInteger` at runtime.
 
 ## 5. Data model
 

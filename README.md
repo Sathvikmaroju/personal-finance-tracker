@@ -1,6 +1,6 @@
-# Personal Finance Tracker — Specification Repository
+# Personal Finance Tracker
 
-Single source of truth for design and implementation. The product-definition phase is closed; these documents are the frozen input to Claude Design and Claude Code.
+An offline, manually maintained personal finance app for Android (India / INR). This repository holds the frozen specification, the final design prototype, and the app source.
 
 ---
 
@@ -8,27 +8,55 @@ Single source of truth for design and implementation. The product-definition pha
 
 ```
 personal-finance-tracker/
-├── README.md                 ← this file
-├── shared/                   14 files — read by BOTH tools
-├── design/                    1 file  — Claude Design entry point
-└── code/                     19 files — Claude Code only
+├── README.md          ← this file
+├── docs/
+│   ├── shared/        14 files — product, domain, UX and design-system specs
+│   ├── engineering/   19 files — data model, invariants, architecture, tests, plan
+│   └── design/         5 files + prototype/ — design handoff, change lists, decisions
+└── code/              the React Native (Expo) app
 ```
 
-**34 files total.** No file is duplicated. Every document is authoritative for its own domain and cross-references others by number.
+## Tech stack
 
----
+| Concern | Choice |
+|---|---|
+| Language / framework | React Native + TypeScript (strict) |
+| Toolkit | Expo (SDK 58), npm |
+| Database | SQLite via `expo-sqlite` |
+| Money | Branded integer-`number` paise, guarded by `Number.isSafeInteger` |
+| Tests | Jest (`jest-expo`) + React Native Testing Library |
+| Builds | EAS Build free tier now; local builds once the free cap is reached |
+| Network | None. No networking, analytics, crash-reporting or OTA-update module (doc 20 §8) |
 
-## shared/ — read by both (14 files)
+The rationale is in `docs/engineering/25_Technical_Architecture.md` §2.
 
-| File | Why both need it |
+## Run the app
+
+```bash
+cd code
+npm install
+npx expo start      # scan the QR code with Expo Go on an Android phone
+npm test            # unit and component tests
+npm run typecheck   # tsc --noEmit
+```
+
+## Where to start
+
+**Building the app:** read `docs/engineering/30_Claude_Code_Handoff.md` first, then follow `docs/engineering/28_Implementation_Plan.md` (10 vertical-slice phases). The source layout under `code/src/` follows doc 25 §11.
+
+**Visual reference:** `docs/design/prototype/Personal Finance App.dc.html` is the final design prototype (phase 2A export, 2026-11-10). To view it, run `python -m http.server` in that folder and open the file in a browser. Claude Design is retired; the prototype and docs 30–33 in `docs/design/` are the final design record. `docs/design/33_Phase2A_Fix_List.md` lists the known fixes the prototype still needs; implement the fixed behaviour, not the prototype's defects.
+
+## docs/shared/ (14 files)
+
+| File | Purpose |
 |---|---|
 | `PersonalFinance_Final_Requirements_v1.1.md` | The frozen canonical requirements |
-| `Requirements_Exceptions.md` | 6 logged contradictions and their resolutions |
+| `Requirements_Exceptions.md` | Logged contradictions and their resolutions |
 | `01_Product_Master_Spec.md` | Principles, users, jobs, feature inventory, scope |
 | `02_Domain_Model.md` | Canonical concepts and terminology |
-| `06_Metrics_Calculation_Engine.md` | The 25 metrics — Design needs the user-facing names and edge-case display rules |
-| `07_Analytics_Engine.md` | Baselines and the progressive-intelligence ladder — source of empty/insufficient copy |
-| `08_Reporting_Specification.md` | The 6 reports and the Answer → Explanation → Detail hierarchy |
+| `06_Metrics_Calculation_Engine.md` | The 25 metrics |
+| `07_Analytics_Engine.md` | Baselines and the progressive-intelligence ladder |
+| `08_Reporting_Specification.md` | The 6 reports |
 | `09_Information_Architecture.md` | Navigation, 45 screens, routes |
 | `10_User_Flows.md` | 27 flows |
 | `11_Screen_Specification.md` | Every screen with its states |
@@ -37,13 +65,7 @@ personal-finance-tracker/
 | `18_States_Errors_Empty_States.md` | Every application state and its copy |
 | `19_Accessibility.md` | WCAG AA conformance requirements |
 
-## design/ — Claude Design only (1 file)
-
-| File | Purpose |
-|---|---|
-| `29_Claude_Design_Handoff.md` | Entry point. Reading order, deliverables, and §15 — what must not change |
-
-## code/ — Claude Code only (19 files)
+## docs/engineering/ (19 files)
 
 | File | Purpose |
 |---|---|
@@ -60,41 +82,32 @@ personal-finance-tracker/
 | `22_Acceptance_Test_Suite.md` | 142 tests |
 | `23_Test_Data_Scenarios.md` | 16 deterministic datasets |
 | `24_Requirements_Traceability.md` | Requirement → test matrix |
-| `25_Technical_Architecture.md` | Layers and boundaries |
+| `25_Technical_Architecture.md` | Layers, boundaries, tech stack |
 | `26_Domain_Service_Contracts.md` | Interfaces |
 | `27_Database_Migrations.md` | Versioning and safety |
 | `28_Implementation_Plan.md` | 10 vertical-slice phases |
 | `31_Release_Readiness.md` | Production gates |
 | `32_Coverage_Report.md` | Cross-document audit and status |
 
----
+## docs/design/
 
-## Pointing each tool at its files
+| File | Purpose |
+|---|---|
+| `29_Claude_Design_Handoff.md` | Original design brief (historical) |
+| `30_Mobile_Design_Change_List.md` | Consolidated design change items |
+| `31_Prototype_vs_Spec_Gaps.md` | Prototype features not stated in the spec |
+| `32_Decisions_Log.md` | Product-owner decisions |
+| `33_Phase2A_Fix_List.md` | Remaining fixes against the final prototype |
+| `prototype/` | Final prototype export and changelogs |
 
-**Claude Code** — give it the repo root. It reads `shared/` and `code/`, starting from `code/30_Claude_Code_Handoff.md`.
-
-**Claude Design** — give it `shared/` + `design/` (15 files), starting from `design/29_Claude_Design_Handoff.md`. If Design runs as an upload-based Project rather than reading the local folder, upload exactly those 15 files.
-
----
-
-## Rules for maintaining this repo
-
-1. **Do not renumber the files.** Every document cross-references others by number ("doc 04 governs", "see doc 22 T-73"). Renumbering silently breaks dozens of internal references. The gaps in `shared/` (01, 02, 06, 07, 08…) are correct and intentional.
-
-2. **Do not rename `Requirements_Exceptions.md`.** It is referenced by name in docs 24, 29, 30, 31, and 32.
-
-3. **Edit shared files once.** That is the point of this layout — a change to `13_Design_System.md` reaches both tools immediately.
-
-4. **New contradictions go in `Requirements_Exceptions.md`**, never into a silent edit of a requirement. Six entries already exist; follow their format: requirement → problem → impact → resolution → traceability.
-
-5. **Anything new must trace to `24_Requirements_Traceability.md`** or be logged as an exception. An untraceable artefact is scope creep.
+**Number clash:** numbers 30, 31 and 32 exist in both `engineering/` and `design/`. They are different documents. Cite them with the folder, for example "design doc 32".
 
 ---
 
-## Status
+## Rules for maintaining the docs
 
-Specification **READY**: 0 technical ambiguities, 0 financial ambiguities, 0 unresolved exceptions.
-
-Three behavioural risks remain deliberately unsolved and are marked for prototype validation — manual-entry sustainability, balance-check adoption, and essential/flexible classification accuracy. See `32_Coverage_Report.md` §7.
-
-**Next phase:** Claude Design → prototype → real-user validation → Claude Code → implementation per `28_Implementation_Plan.md`.
+1. **Do not renumber the files.** Documents cross-reference each other by number ("doc 04 governs", "see doc 22 T-73"). Gaps in the numbering are intentional.
+2. **Do not rename `Requirements_Exceptions.md`.** Docs 24, 29, 30, 31 and 32 reference it by name.
+3. **Edit shared files once.** Each fact lives in one document.
+4. **New contradictions go in `Requirements_Exceptions.md`**, never into a silent edit of a requirement. Follow the existing format: requirement → problem → impact → resolution → traceability.
+5. **Anything new must trace to `24_Requirements_Traceability.md`** or be logged as an exception.

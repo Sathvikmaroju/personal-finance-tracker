@@ -32,9 +32,12 @@ Chosen for the constraints this product actually has, not for popularity.
 
 | Concern | Choice | Reason |
 |---|---|---|
-| Platform | Native Android first (Kotlin); the architecture is platform-agnostic below the presentation layer | Android is the target market; a shared domain layer keeps iOS open without paying cross-platform costs now |
-| Database | **SQLite** with a typed access layer | ACID transactions, CHECK constraints, foreign keys, integer arithmetic — the four things doc 05 depends on. A document store would push integrity into application code |
-| Money type | Domain `Money` value class over `Long` paise | Makes INV-15 a type-level guarantee rather than a convention |
+| Platform | **React Native + TypeScript (strict)**, Android first; the architecture is platform-agnostic below the presentation layer | Android is the target market; one TypeScript codebase keeps iOS open, and the domain layer stays plain TypeScript |
+| Toolkit | **Expo** (blank TypeScript template), package manager npm | One-command setup, live preview on a phone, maintained native modules. Network-using modules (`expo-updates`, analytics, push) are excluded per doc 20 §8 |
+| Database | **SQLite** via `expo-sqlite`, with a typed access layer | ACID transactions, CHECK constraints, foreign keys, integer arithmetic — the four things doc 05 depends on. A document store would push integrity into application code |
+| Money type | Domain `Money`: a branded type over an integer `number` of paise; every constructor and operation asserts `Number.isSafeInteger` | Makes INV-15 a type-level guarantee rather than a convention. Exact up to 2^53 − 1 paise (about Rs 90 lakh crore); maps directly to SQLite INTEGER. `bigint` was rejected: slower, cannot mix with `number`, awkward in JSON and SQLite bindings |
+| Build | **EAS Build free tier** now; local builds (`npx expo run:android` or `eas build --local`) once the free cap is reached | Free tier (checked 2026-11-10): 15 Android builds, low-priority queue, 45-minute timeout. Local builds have no cap and keep source on the developer's machine |
+| Test runner | **Jest** (`jest-expo` preset) + React Native Testing Library | Runs domain tests in Node with no device (§10) and renders components for snapshot and state tests |
 | Async | Structured concurrency with a single-writer discipline | Prevents interleaved writes from breaking atomicity |
 | State | Unidirectional: immutable state → view, events → application layer | Makes screen states (doc 18) representable and snapshot-testable in isolation |
 | Navigation | Type-safe routes with one back stack per tab | Required by doc 09 §7 context preservation |
@@ -131,6 +134,8 @@ One back stack per tab, preserved across tab switches; sheets and modals layer a
 The domain layer's purity is what makes the most important tests — the financial ones — fast enough to run on every commit. That is the practical payoff of the dependency rule.
 
 ## 11. Project structure
+
+All paths are under `code/src/` in the repository.
 
 ```
 app/            presentation: screens, components, view models, navigation, theme
